@@ -4,3 +4,39 @@ body {
   font-family: sans-serif;
   background: #f4f3ee;
 }
+
+.form-control label,
+.form-control input {
+    width: 100%;
+    display: block;
+}
+
+.form-control label {
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    margin-bottom: 1rem;
+}
+
+.form-actions button,
+.btn {
+    background-color: #463F3A;
+    font: inherit;
+    border: 1px solid #463F3A;
+    border-radius: 3px;
+    padding: 0.25rem 1rem;
+    margin-right: 1rem;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.26);
+    color: #f4f3ee;
+    cursor: pointer;
+}
+
+.form-actions button:hover,
+.form-actions button:active,
+.btn:hover,
+.btn:active {
+    background-color: #E0AFA0;
+    border-color: #E0AFA0;
+    color: #463F3A;
+}

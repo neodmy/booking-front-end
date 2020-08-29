@@ -11,12 +11,12 @@ const RoutesContainer = () => {
   return (
     <main className="main-content">
       <Switch>
-        {!token && <Redirect exact from="/" to="/auth" />}
         {token && <Redirect exact from="/" to="/events" />}
         {token && <Redirect exact from="/auth" to="/events" />}
         {!token && <Route path="/auth" component={AuthPage} />}
         <Route path="/events" component={EventsPage} />
         {token && <Route path="/bookings" component={BookingsPage} />}
+        {!token && <Redirect exact to="/auth" />}
       </Switch>
     </main>
   );
