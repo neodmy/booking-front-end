@@ -10,6 +10,7 @@ export const EventsContext = createContext({});
 export const EventsProvider = ({ children }) => {
   const [createdEvent, setCreatedEvent] = useState({});
   const [events, setEvents] = useState([]);
+  const [isLoadingEvents, setIsLoadingEvents] = useState(false);
 
   const createEvent = async (event) => {
     const fetchedEvent = await createEventRequest(event);
@@ -18,8 +19,15 @@ export const EventsProvider = ({ children }) => {
   };
 
   const listEvents = async () => {
-    const fetchedEvents = await listEventsRequest();
-    setEvents(fetchedEvents);
+    try {
+      setIsLoadingEvents(true);
+      const fetchedEvents = await listEventsRequest();
+      setEvents(fetchedEvents);
+      setIsLoadingEvents(false);
+    } catch (err) {
+      setIsLoadingEvents(false);
+      throw err;
+    }
   };
 
   useEffect(() => {
@@ -33,6 +41,7 @@ export const EventsProvider = ({ children }) => {
         events,
         createEvent,
         listEvents,
+        isLoadingEvents,
       }}
     >
       {children}

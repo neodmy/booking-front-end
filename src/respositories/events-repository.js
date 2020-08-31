@@ -16,10 +16,6 @@ const createEventRequest = async ({
               description
               date
               price
-              creator {
-                  _id
-                  email
-              }
             }
           }
         `,

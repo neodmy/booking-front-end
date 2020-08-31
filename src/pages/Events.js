@@ -3,6 +3,8 @@ import React, { useState, useContext } from "react";
 
 import Modal from "../components/Modal/Modal";
 import Backdrop from "../components/Backdrop/Backdrop";
+import EventList from "../components/Events/EventList/EventList";
+import Spinner from "../components/Spinner/Spinner";
 import { AuthContext } from "../context/auth-context";
 import { EventsContext } from "../context/events-context";
 
@@ -10,8 +12,9 @@ import "./Events.css";
 
 const EventsPage = () => {
   const [creating, setCreating] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
   const { token } = useContext(AuthContext);
-  const { createEvent, events } = useContext(EventsContext);
+  const { createEvent, events, isLoadingEvents } = useContext(EventsContext);
 
   const titleElRef = React.createRef();
   const priceElRef = React.createRef();
@@ -24,6 +27,7 @@ const EventsPage = () => {
 
   const modalCancelHandler = () => {
     setCreating(false);
+    setSelectedEvent(null);
   };
 
   const modalConfirmHandler = () => {
@@ -44,6 +48,12 @@ const EventsPage = () => {
     createEvent({ title, price: Number(price), date, description, token });
   };
 
+  const showDetailHandler = (eventId) => {
+    setSelectedEvent(events.find(({ _id }) => _id === eventId));
+  };
+
+  const bookEventHandler = () => {};
+
   return (
     <>
       {creating && (
@@ -55,6 +65,7 @@ const EventsPage = () => {
             canConfirm
             onCancel={modalCancelHandler}
             onConfirm={modalConfirmHandler}
+            confirmText="Confirm"
           >
             <form>
               <div className="form-control">
@@ -77,6 +88,26 @@ const EventsPage = () => {
           </Modal>
         </>
       )}
+      {selectedEvent && (
+        <>
+          <Backdrop />
+          <Modal
+            title={selectedEvent.title}
+            canCancel
+            canConfirm
+            onCancel={modalCancelHandler}
+            onConfirm={bookEventHandler}
+            confirmText="Book"
+          >
+            <h1>{selectedEvent.title}</h1>
+            <h2>
+              ${selectedEvent.price} -{" "}
+              {new Date(selectedEvent.date).toLocaleDateString()}
+            </h2>
+            <p>{selectedEvent.description}</p>
+          </Modal>
+        </>
+      )}
       {token && (
         <div className="events-control">
           <p>Share you own Events!</p>
@@ -89,16 +120,11 @@ const EventsPage = () => {
           </button>
         </div>
       )}
-      <ul className="events__list">
-        {events.map((event) => {
-          const { _id, title } = event;
-          return (
-            <li className="events__list-item" key={_id}>
-              {title}
-            </li>
-          );
-        })}
-      </ul>
+      {isLoadingEvents ? (
+        <Spinner />
+      ) : (
+        <EventList events={events} onViewDetail={showDetailHandler} />
+      )}
     </>
   );
 };

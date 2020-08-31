@@ -4,7 +4,15 @@ import React from "react";
 import "./Modal.css";
 
 const Modal = (props) => {
-  const { title, children, canCancel, canConfirm, onCancel, onConfirm } = props;
+  const {
+    title,
+    children,
+    canCancel,
+    canConfirm,
+    onCancel,
+    onConfirm,
+    confirmText,
+  } = props;
   return (
     <div className="modal">
       <header className="modal__header">
@@ -19,7 +27,7 @@ const Modal = (props) => {
         )}
         {canConfirm && (
           <button type="button" className="btn" onClick={onConfirm}>
-            Confirm
+            {confirmText}
           </button>
         )}
       </section>
